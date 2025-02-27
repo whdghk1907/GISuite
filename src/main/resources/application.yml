@@ -2,19 +2,30 @@ server:
   port: 8080
 
 spring:
+  application:
+    name: GISuite
+
   datasource:
-    url: jdbc:postgresql://localhost:5432/gisuite
-    username: gis_user
-    password: gis_password
+    url: jdbc:postgresql://98.84.134.140:5432/postgres
+    username: postgres
+    password: jhhong
     driver-class-name: org.postgresql.Driver
+    hikari:
+        maximum-pool-size: 10
+        minimum-idle: 2
+        idle-timeout: 30000
+        connection-timeout: 30000
+        max-lifetime: 1800000
+
   jpa:
-    database-platform: org.hibernate.spatial.dialect.postgis.PostgisDialect
-    hibernate:
-      ddl-auto: update
-    show-sql: true
     properties:
       hibernate:
         format_sql: true
+        show_sql: true
+        hbm2ddl.auto: update
+        max_fetch_depth: 5
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
 
 logging:
   level:

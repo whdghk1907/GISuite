@@ -1,5 +1,6 @@
 package com.gisuite.entity;
 
+import com.gisuite.annotation.Obligation;
 import com.gisuite.annotation.UML;
 import jakarta.persistence.*;
 

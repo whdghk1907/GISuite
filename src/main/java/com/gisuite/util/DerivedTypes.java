@@ -19,6 +19,6 @@ public class DerivedTypes {
     }
 
     public static Unit<Length> kilometre() {
-        return Units.KILOMETRE;
+        return Units.METRE.multiply(1000); // 킬로미터 단위 정의
     }
 }

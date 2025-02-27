@@ -7,10 +7,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 
 import jakarta.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import org.springframework.boot.jdbc.DataSourceBuilder;
+import com.zaxxer.hikari.HikariDataSource;
 import java.util.Properties;
 
 @Configuration
@@ -29,14 +30,30 @@ public class DatabaseConfig {
     @Value("${spring.datasource.driver-class-name}")
     private String databaseDriver;
 
+    @Value("${spring.datasource.hikari.maximum-pool-size:10}")
+    private int maxPoolSize;
+
+    @Value("${spring.datasource.hikari.minimum-idle:2}")
+    private int minIdle;
+
+    @Value("${spring.datasource.hikari.idle-timeout:30000}")
+    private long idleTimeout;
+
+    @Value("${spring.datasource.hikari.max-lifetime:1800000}")
+    private long maxLifetime;
+
     @Bean
     public DataSource dataSource() {
-        return DataSourceBuilder.create()
-                .url(databaseUrl)
-                .username(databaseUsername)
-                .password(databasePassword)
-                .driverClassName(databaseDriver)
-                .build();
+        HikariDataSource dataSource = new HikariDataSource();
+        dataSource.setJdbcUrl(databaseUrl);
+        dataSource.setUsername(databaseUsername);
+        dataSource.setPassword(databasePassword);
+        dataSource.setDriverClassName(databaseDriver);
+        dataSource.setMaximumPoolSize(maxPoolSize);
+        dataSource.setMinimumIdle(minIdle);
+        dataSource.setIdleTimeout(idleTimeout);
+        dataSource.setMaxLifetime(maxLifetime);
+        return dataSource;
     }
 
     @Bean
@@ -54,9 +71,10 @@ public class DatabaseConfig {
 
     private Properties hibernateProperties() {
         Properties properties = new Properties();
-        properties.setProperty("hibernate.dialect", "org.hibernate.spatial.dialect.postgis.PostgisDialect");
+        properties.setProperty("hibernate.jdbc.lob.non_contextual_creation", "true");
         properties.setProperty("hibernate.show_sql", "true");
         properties.setProperty("hibernate.format_sql", "true");
+        properties.setProperty("hibernate.hbm2ddl.auto", "update"); // 스키마 자동 업데이트
         return properties;
     }
 
