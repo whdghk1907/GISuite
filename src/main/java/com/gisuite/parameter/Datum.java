@@ -1,4 +1,4 @@
-package com.gisuite.referencing;
+package com.gisuite.parameter;
 
 /**
  * ISO 19111 기반의 Datum (기준).
