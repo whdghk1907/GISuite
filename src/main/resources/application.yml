@@ -6,9 +6,9 @@ spring:
     name: GISuite
 
   datasource:
-    url: jdbc:postgresql://98.84.134.140:5432/postgres
-    username: postgres
-    password: jhhong
+    url: jdbc:postgresql://98.84.134.140:5432/
+    username:
+    password:
     driver-class-name: org.postgresql.Driver
     hikari:
         maximum-pool-size: 10
